@@ -1,0 +1,51 @@
+version: '3'
+services:
+  localstack:
+    image: localstack/localstack
+    hostname: localstack
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sqs,lambda
+      - AWS_DEFAULT_REGION=us-east-2
+      - EDGE_PORT=4566
+    volumes:
+      - "./docker/sqs/queue_handler.sh:/etc/localstack/init/ready.d/queue_handler.sh"
+    networks:
+      - wfo
+
+  postgres:
+    image: postgres:latest
+    hostname: postgres
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=demo
+      - POSTGRES_USER=demo
+      - POSTGRES_PASSWORD=demo
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./docker/sql/db_setup.sql:/docker-entrypoint-initdb.d/db_setup.sql
+    networks:
+      - wfo
+
+  workflow-orchestrator:
+    image: wf-v1.0
+    hostname: workflow-orchestrator
+    container_name: workflow-orchestrator
+    depends_on:
+      - localstack
+      - postgres
+    build:
+      context: "."
+    networks:
+      - wfo
+volumes:
+  db:
+    driver: local
+
+networks:
+  wfo:
+    driver: bridge

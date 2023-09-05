@@ -1,0 +1,22 @@
+{
+  "database": {
+    "dbName": "demo",
+    "user": "demo",
+    "password": "demo",
+    "host": "postgres",
+    "port": "5432"
+  },
+  "aws": {
+    "region": "us-east-2",
+    "endpointUrl": "http://localstack:4566",
+    "cmdQueueUrl": "http://localstack:4566/000000000000/command-queue",
+    "eventQueueUrl": "http://localstack:4566/000000000000/event-queue",
+    "awsAccessKeyId": "dummy",
+    "awsSecretAccessKeys": "dummy"
+  },
+  "tables": {
+    "jobLog": "public.job_log",
+    "pipelineRef": "public.pipeline_details",
+    "dataFeedRef": "public.data_feed_config"
+  }
+}
